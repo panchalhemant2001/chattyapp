@@ -7,6 +7,9 @@ class App extends Component {
   constructor(props) {
     super(props);
 
+    //Creating a client web socket that listens to the chat server on port number 3001
+    this.socket = '';
+
     this.state= {
         lastMessageId: 3,
         loading: true,
@@ -117,6 +120,13 @@ class App extends Component {
           this.setState({messages: messages});
         }, 3000
       );
+
+
+      //Initializing a client Websocket and connecting it to the chat server on port 3001 (localhost)
+      this.socket = new WebSocket('ws://localhost:3001')
+      this.socket.onopen = (event) => {
+        console.log('Connected to Server');
+      };
   }
 }
 
