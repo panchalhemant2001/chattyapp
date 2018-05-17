@@ -78,7 +78,11 @@ class App extends Component {
       newMessage.id =lastMessageId;
       const updatedMessages = [...oldMessages, newMessage];
 
-      this.setState({lastMessageId: lastMessageId, messages: updatedMessages});
+      //this.setState({lastMessageId: lastMessageId, messages: updatedMessages});
+
+
+      this.socket.send(JSON.stringify(newMessage));
+
     }
 
     if(this.state.loading) {
@@ -123,10 +127,16 @@ class App extends Component {
 
 
       //Initializing a client Websocket and connecting it to the chat server on port 3001 (localhost)
-      this.socket = new WebSocket('ws://localhost:3001')
+      this.socket = new WebSocket('ws://localhost:3001');
+
+
       this.socket.onopen = (event) => {
         console.log('Connected to Server');
       };
+
+      this.socket.onerror = (event) => {
+        console.log('Error');
+      }
   }
 }
 
