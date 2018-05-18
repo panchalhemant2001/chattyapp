@@ -11,77 +11,32 @@ class App extends Component {
     this.socket = '';
 
     this.state= {
-        lastMessageId: 3,
         loading: true,
         currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
-        messages: [
-          {
-            id: 1,
-            username: "Bob",
-            content: "Has anyone seen my marbles?",
-          },
-          {
-            id: 2,
-            username: "Anonymous",
-            content: "No, I think you lost them. You lost your marbles Bob. You lost them for good."
-          }
-        ]
+        messages: []
     };
-    /*
-    this.state = {
-      messages: [
-        {
-          type: "incomingMessage",
-          content: "I won't be impressed with technology until I can download food.",
-          username: "Anonymous1"
-        },
-        {
-          type: "incomingNotification",
-          content: "Anonymous1 changed their name to nomnom"
-        },
-        {
-          type: "incomingMessage",
-          content: "I wouldn't want to download Kraft Dinner. I'd be scared of cheese packet loss.",
-          username: "Anonymous2"
-        },
-        {
-          type: "incomingMessage",
-          content: "...",
-          username: "nomnom"
-        },
-        {
-          type: "incomingMessage",
-          content: "I'd love to download a fried egg, but I'm afraid encryption would scramble it",
-          username: "Anonymous2"
-        },
-        {
-          type: "incomingMessage",
-          content: "This isn't funny. You're not funny",
-          username: "nomnom"
-        },
-        {
-          type: "incomingNotification",
-          content: "Anonymous2 changed their name to NotFunny",
-        }
-      ]
-    };
-    */
   }
 
 
   render() {
 
     const addNewMessage = (newMessage) => {
-      const oldMessages = this.state.messages;
-      const lastMessageId = this.state.lastMessageId + 1;
-
-      newMessage.id =lastMessageId;
-      const updatedMessages = [...oldMessages, newMessage];
-
-      //this.setState({lastMessageId: lastMessageId, messages: updatedMessages});
-
-
+      //sending message typed by user to the socket server in string format
       this.socket.send(JSON.stringify(newMessage));
+
+      this.socket.onmessage = (event) => {
+        console.log(event);
+
+        //code to handle incoming message
+        const incomingMessage = JSON.parse(event.data);
+        const oldMessages = this.state.messages;
+
+
+
+        const updatedMessages = [incomingMessage, ...oldMessages];
+
+        this.setState({messages: updatedMessages});
+      }
 
     }
 
@@ -116,6 +71,8 @@ class App extends Component {
       1000);
 
       console.log("componentDidMount <App />");
+
+      /*
       setTimeout(
         () => {
           console.log("Simulating incoming message");
@@ -124,7 +81,7 @@ class App extends Component {
           this.setState({messages: messages});
         }, 3000
       );
-
+      */
 
       //Initializing a client Websocket and connecting it to the chat server on port 3001 (localhost)
       this.socket = new WebSocket('ws://localhost:3001');

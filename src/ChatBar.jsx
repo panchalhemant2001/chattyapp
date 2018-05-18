@@ -7,14 +7,14 @@ export default class ChatBar extends React.Component {
     const handleOnKeyPress = (event) => {
       if(event.key === "Enter") {
         //alert("Enter key is pressed");
-        const id = 0; //new message so id is unknown so it is 0
         const content = event.target.value;
         const addNewMessage = this.props.addNewMessage;
 
         if(content.trim() === '') {
           alert("Empty message");
         } else {
-          addNewMessage({id: id, username: username, content: content});
+          addNewMessage({username: username, content: content});
+          //addNewMessage({id: id, username: username, content: content});
           event.target.value='';
         }
 
