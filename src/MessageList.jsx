@@ -7,6 +7,7 @@ export default class MessageList extends React.Component {
         (message) => <Message
                         key={message.id}
                         id={message.id}
+                        type={message.type}
                         username={message.username}
                         content={message.content}
                       />

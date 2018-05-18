@@ -13,7 +13,7 @@ class App extends Component {
     this.state= {
         loading: true,
         currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
-        messages: []
+        messages: [],   //stores messages and notifications
     };
   }
 
@@ -23,22 +23,6 @@ class App extends Component {
     const addNewMessage = (newMessage) => {
       //sending message typed by user to the socket server in string format
       this.socket.send(JSON.stringify(newMessage));
-
-      this.socket.onmessage = (event) => {
-        console.log(event);
-
-        //code to handle incoming message
-        const incomingMessage = JSON.parse(event.data);
-        const oldMessages = this.state.messages;
-
-
-
-        const updatedMessages = [incomingMessage, ...oldMessages];
-
-        this.setState({messages: updatedMessages});
-        this.setState({currentUser: {name: incomingMessage.username}});
-      }
-
     }
 
     if(this.state.loading) {
@@ -51,7 +35,7 @@ class App extends Component {
             </nav>
             <main className='messages'>
               {/* <Message /> */}
-              <MessageList messages={this.state.messages}/>
+              <MessageList messages={ this.state.messages } />
             </main>
 
             <ChatBar currentUser={this.state.currentUser}
@@ -73,17 +57,6 @@ class App extends Component {
 
       console.log("componentDidMount <App />");
 
-      /*
-      setTimeout(
-        () => {
-          console.log("Simulating incoming message");
-          const newMessage = {id: 3, username: "Michelle", content: "Hello there!"};
-          const messages = this.state.messages.concat(newMessage);
-          this.setState({messages: messages});
-        }, 3000
-      );
-      */
-
       //Initializing a client Websocket and connecting it to the chat server on port 3001 (localhost)
       this.socket = new WebSocket('ws://localhost:3001');
 
@@ -95,6 +68,20 @@ class App extends Component {
       this.socket.onerror = (event) => {
         console.log('Error');
       }
+
+      this.socket.onmessage = (event) => {
+        console.log(event);
+
+        const msgType = event.data.type;
+
+        //code to handle incoming message / notifications
+        const incomingMsgOrNotification = JSON.parse(event.data);
+        const oldMessages = this.state.messages;
+        const updatedMessages = [incomingMsgOrNotification, ...oldMessages];
+        this.setState({currentUser: {name: incomingMsgOrNotification.username}});
+        this.setState({messages: updatedMessages});
+      }
+
   }
 }
 
