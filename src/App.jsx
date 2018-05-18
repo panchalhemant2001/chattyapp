@@ -36,6 +36,7 @@ class App extends Component {
         const updatedMessages = [incomingMessage, ...oldMessages];
 
         this.setState({messages: updatedMessages});
+        this.setState({currentUser: {name: incomingMessage.username}});
       }
 
     }
