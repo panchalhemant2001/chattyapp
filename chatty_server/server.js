@@ -16,11 +16,20 @@ const server = express()
 //Create the WebSockets Server
 const wss = new SocketServer({server});
 
+const connectionDetails = {type: 'connectionDetails'};
 // Set up a callback that will run when a client connects to the server
 // When a client connects they are assigned a socket, represented by
 // the ws parameter in the callback.
 wss.on('connection', (ws) => {
   console.log('Client connected');
+  console.log(wss._server._connections);
+
+  connectionDetails.totalConnections = wss._server._connections;
+
+  // wss.clients.forEach(function each(client) {
+  //     client.send(JSON.stringify(connectionDetails));
+  // });
+
 
   ws.on('message', (message) => {
     const msg = JSON.parse(message);
@@ -30,22 +39,40 @@ wss.on('connection', (ws) => {
         console.log('Message: %s said %s',msg.username, msg.content);
         msg.id = uuidv1();    //Generating unique ID for the message
         msg.type = 'incomingMessage';
+        //broadcasting the message/notification to all connected clients
+        wss.clients.forEach(function each(client) {
+          client.send(JSON.stringify(msg));
+        });
         break;
       case 'postNotification':
         console.log('Notification: %s',msg.content);
         msg.id = uuidv1();
         msg.type = 'incomingNotification';
+        //broadcasting the message/notification to all connected clients
+        wss.clients.forEach(function each(client) {
+          client.send(JSON.stringify(msg));
+        });
+        break;
+      case 'connectionDetails':
+
+        wss.clients.forEach(function each(client) {
+            client.send(JSON.stringify(connectionDetails));
+        });
         break;
     }
 
-    //broadcasting the message/notification to all connected clients
-    wss.clients.forEach(function each(client) {
-        client.send(JSON.stringify(msg));
-    });
   });
 
 
 
   //Set up a callback for when a client closes the socket. This usually means they closed their browser.
-  ws.on('close', () => console.log('Client disconnected'));
+  ws.on('close', () => {
+      console.log('Client disconnected');
+      // console.log(wss._server._connections);
+      // connectionDetails.totalConnections = wss._server._connections;
+      // wss.clients.forEach(function each(client) {
+      //     client.send(JSON.stringify(connectionDetails));
+      // });
+    }
+  );
 });

@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import Message from './Message.jsx';
 import MessageList from './MessageList.jsx';
 import ChatBar from './ChatBar.jsx';
+import TotalUsersOnline from './TotalUsersOnline.jsx';
 
 class App extends Component {
   constructor(props) {
@@ -11,6 +12,7 @@ class App extends Component {
     this.socket = '';
 
     this.state= {
+        connections: 0,
         loading: true,
         currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
         messages: [],   //stores messages and notifications
@@ -32,6 +34,14 @@ class App extends Component {
           <div>
             <nav className='navbar'>
               <a href='/' className='navbar-brand'>Chatty</a>
+              {/*
+                <span className='user-status'>
+                  {this.state.connections} Users Online
+                </span>
+              */}
+
+              <TotalUsersOnline connections={ this.state.connections } />
+
             </nav>
             <main className='messages'>
               {/* <Message /> */}
@@ -63,7 +73,9 @@ class App extends Component {
 
       this.socket.onopen = (event) => {
         console.log('Connected to Server');
+        this.socket.send(JSON.stringify({type: 'connectionDetails'}));
       };
+
 
       this.socket.onerror = (event) => {
         console.log('Error');
@@ -71,15 +83,23 @@ class App extends Component {
 
       this.socket.onmessage = (event) => {
         console.log(event);
+        const data = JSON.parse(event.data);
+        console.log(data.totalConnections);
 
-        const msgType = event.data.type;
+        if(data.type == 'connectionDetails') {
+          //code to update number of _connections
+          //alert(data.totalConnections);
+          this.state.connections = data.totalConnections;
+          //document.getElementById('connDetails').innerHtml(data.totalConnections);
 
-        //code to handle incoming message / notifications
-        const incomingMsgOrNotification = JSON.parse(event.data);
-        const oldMessages = this.state.messages;
-        const updatedMessages = [incomingMsgOrNotification, ...oldMessages];
-        this.setState({currentUser: {name: incomingMsgOrNotification.username}});
-        this.setState({messages: updatedMessages});
+        } else {
+          //code to handle incoming message / notifications
+          const incomingMsgOrNotification = JSON.parse(event.data);
+          const oldMessages = this.state.messages;
+          const updatedMessages = [incomingMsgOrNotification, ...oldMessages];
+          this.setState({currentUser: {name: incomingMsgOrNotification.username}});
+          this.setState({messages: updatedMessages});
+        }
       }
 
   }
