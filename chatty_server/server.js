@@ -17,8 +17,6 @@ const server = express()
 const colorCodes = ['#00ff00', '#ff0000','#0000ff', '#4e2f7a'];
 let i = 0;
 
-
-
 //Create the WebSockets Server
 const wss = new SocketServer({server});
 
@@ -68,10 +66,7 @@ wss.on('connection', (ws) => {
         });
         break;
     }
-
   });
-
-
 
   //Set up a callback for when a client closes the socket. This usually means they closed their browser.
   ws.on('close', () => {

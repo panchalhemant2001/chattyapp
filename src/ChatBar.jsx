@@ -3,8 +3,7 @@ import React, {Component} from 'react';
 export default class ChatBar extends React.Component {
   render() {
     let username = this.props.currentUser.name;
-    let oldUsername = username; //document.getElementById('uname').value;
-
+    let oldUsername = username;
 
     const handleOnKeyPress = (event) => {
       if(event.key === "Enter") {
@@ -18,7 +17,6 @@ export default class ChatBar extends React.Component {
               alert("Empty message");
             } else {
               addNewMessage({type: "postMessage", username: username, content: content, color: colorCode});
-              //addNewMessage({id: id, username: username, content: content});
               event.target.value='';
             }
             event.target.focus();
@@ -28,13 +26,10 @@ export default class ChatBar extends React.Component {
               alert("Username cannot be empty!");
               event.target.value = username;
             } else {
-              //alert("User name is changed");
-
               username = event.target.value;
               let colorCode =this.props.colorCode;
               //incase if the user changes the user name which is different than the current user name
               if(oldUsername !== username) {
-                //content and addNewMessage already declared in above case, so no need to use const/let
                 let content = `*** ${oldUsername} *** changed their name to *** ${username} ***`;
                 let addNewMessage = this.props.addNewMessage;
                 addNewMessage({type: "postNotification", username: username, content: content, color: colorCode});
@@ -52,11 +47,8 @@ export default class ChatBar extends React.Component {
 
     const handleOnBlur = (event) => {
       if(oldUsername !== event.target.value) {
-        //alert("You must press ENTER to change the user name");
         event.target.value = oldUsername;
       }
-      //oldUsername = '';
-      //event.target.focus();
     }
 
     return (

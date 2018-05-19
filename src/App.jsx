@@ -20,9 +20,7 @@ class App extends Component {
     };
   }
 
-
   render() {
-
     const addNewMessage = (newMessage) => {
       //sending message typed by user to the socket server in string format
       this.socket.send(JSON.stringify(newMessage));
@@ -35,24 +33,16 @@ class App extends Component {
           <div>
             <nav className='navbar'>
               <a href='/' className='navbar-brand'>Chatty</a>
-              {/*
-                <span className='user-status'>
-                  {this.state.connections} Users Online
-                </span>
-              */}
-
               <TotalUsersOnline connections={ this.state.connections } />
-
             </nav>
+
             <main className='messages'>
-              {/* <Message /> */}
               <MessageList messages={ this.state.messages } />
             </main>
 
             <ChatBar currentUser={this.state.currentUser}
               addNewMessage={addNewMessage} colorCode={this.state.color}
             />
-
           </div>
         );
     }
@@ -71,12 +61,10 @@ class App extends Component {
       //Initializing a client Websocket and connecting it to the chat server on port 3001 (localhost)
       this.socket = new WebSocket('ws://localhost:3001');
 
-
       this.socket.onopen = (event) => {
         console.log('Connected to Server');
         this.socket.send(JSON.stringify({type: 'connectionDetails'}));
       };
-
 
       this.socket.onerror = (event) => {
         console.log('Error');
@@ -89,14 +77,10 @@ class App extends Component {
 
         if(data.type == 'connectionDetails') {
           //code to update number of _connections
-          //alert(data.totalConnections);
           this.setState({connections: data.totalConnections});
           if(this.state.color == '') {
             this.setState({color: data.color});
           }
-          //this.state.connections = data.totalConnections;
-          //document.getElementById('connDetails').innerHtml(data.totalConnections);
-
         } else {
           //code to handle incoming message / notifications
           const incomingMsgOrNotification = JSON.parse(event.data);
@@ -106,7 +90,6 @@ class App extends Component {
           this.setState({messages: updatedMessages});
         }
       }
-
   }
 }
 
