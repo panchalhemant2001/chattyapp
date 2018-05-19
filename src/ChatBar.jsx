@@ -55,7 +55,7 @@ export default class ChatBar extends React.Component {
         event.target.value = oldUsername;
       }
       //oldUsername = '';
-      event.target.focus();
+      //event.target.focus();
     }
 
     return (

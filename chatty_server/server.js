@@ -13,6 +13,12 @@ const server = express()
   .use(express.static('public'))
   .listen(PORT, '0.0.0.0', 'localhost', () => console.log(`Listening on ${ PORT }`));
 
+
+const colorCodes = ['#00ff00', '#ff0000','#0000ff'];
+let i = 0;
+
+
+
 //Create the WebSockets Server
 const wss = new SocketServer({server});
 
@@ -22,14 +28,10 @@ const connectionDetails = {type: 'connectionDetails'};
 // the ws parameter in the callback.
 wss.on('connection', (ws) => {
   console.log('Client connected');
+  console.log(ws);
   console.log(wss._server._connections);
 
   connectionDetails.totalConnections = wss._server._connections;
-
-  // wss.clients.forEach(function each(client) {
-  //     client.send(JSON.stringify(connectionDetails));
-  // });
-
 
   ws.on('message', (message) => {
     const msg = JSON.parse(message);
@@ -54,9 +56,15 @@ wss.on('connection', (ws) => {
         });
         break;
       case 'connectionDetails':
+        connectionDetails.totalConnections = wss._server._connections;
 
         wss.clients.forEach(function each(client) {
+            connectionDetails.color = colorCodes[i];
             client.send(JSON.stringify(connectionDetails));
+            i++;
+            if(i == colorCodes.length) {
+              i=0;
+            }
         });
         break;
     }
@@ -68,11 +76,10 @@ wss.on('connection', (ws) => {
   //Set up a callback for when a client closes the socket. This usually means they closed their browser.
   ws.on('close', () => {
       console.log('Client disconnected');
-      // console.log(wss._server._connections);
-      // connectionDetails.totalConnections = wss._server._connections;
-      // wss.clients.forEach(function each(client) {
-      //     client.send(JSON.stringify(connectionDetails));
-      // });
+      connectionDetails.totalConnections = wss._server._connections;
+      wss.clients.forEach(function each(client) {
+          client.send(JSON.stringify(connectionDetails));
+      });
     }
   );
 });

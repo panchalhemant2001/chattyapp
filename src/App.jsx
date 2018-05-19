@@ -13,6 +13,7 @@ class App extends Component {
 
     this.state= {
         connections: 0,
+        color: '',
         loading: true,
         currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
         messages: [],   //stores messages and notifications
@@ -45,6 +46,7 @@ class App extends Component {
             </nav>
             <main className='messages'>
               {/* <Message /> */}
+              {this.state.color}
               <MessageList messages={ this.state.messages } />
             </main>
 
@@ -89,7 +91,11 @@ class App extends Component {
         if(data.type == 'connectionDetails') {
           //code to update number of _connections
           //alert(data.totalConnections);
-          this.state.connections = data.totalConnections;
+          this.setState({connections: data.totalConnections});
+          if(this.state.color == '') {
+            this.setState({color: data.color});
+          }
+          //this.state.connections = data.totalConnections;
           //document.getElementById('connDetails').innerHtml(data.totalConnections);
 
         } else {
