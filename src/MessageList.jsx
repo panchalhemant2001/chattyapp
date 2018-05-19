@@ -10,6 +10,7 @@ export default class MessageList extends React.Component {
                         type={message.type}
                         username={message.username}
                         content={message.content}
+                        color={message.color}
                       />
       );
 

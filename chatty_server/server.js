@@ -14,7 +14,7 @@ const server = express()
   .listen(PORT, '0.0.0.0', 'localhost', () => console.log(`Listening on ${ PORT }`));
 
 
-const colorCodes = ['#00ff00', '#ff0000','#0000ff'];
+const colorCodes = ['#00ff00', '#ff0000','#0000ff', '#4e2f7a'];
 let i = 0;
 
 

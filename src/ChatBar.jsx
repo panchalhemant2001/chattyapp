@@ -13,10 +13,11 @@ export default class ChatBar extends React.Component {
             let content = event.target.value;
             let addNewMessage = this.props.addNewMessage;
             username = document.getElementById('uname').value;
+            let colorCode =this.props.colorCode;
             if(content.trim() === '') {
               alert("Empty message");
             } else {
-              addNewMessage({type: "postMessage", username: username, content: content});
+              addNewMessage({type: "postMessage", username: username, content: content, color: colorCode});
               //addNewMessage({id: id, username: username, content: content});
               event.target.value='';
             }
@@ -30,13 +31,13 @@ export default class ChatBar extends React.Component {
               //alert("User name is changed");
 
               username = event.target.value;
-
+              let colorCode =this.props.colorCode;
               //incase if the user changes the user name which is different than the current user name
               if(oldUsername !== username) {
                 //content and addNewMessage already declared in above case, so no need to use const/let
                 let content = `*** ${oldUsername} *** changed their name to *** ${username} ***`;
                 let addNewMessage = this.props.addNewMessage;
-                addNewMessage({type: "postNotification", username: username, content: content});
+                addNewMessage({type: "postNotification", username: username, content: content, color: colorCode});
               }
             }
             event.target.focus();

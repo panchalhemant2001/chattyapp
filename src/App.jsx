@@ -46,12 +46,11 @@ class App extends Component {
             </nav>
             <main className='messages'>
               {/* <Message /> */}
-              {this.state.color}
               <MessageList messages={ this.state.messages } />
             </main>
 
             <ChatBar currentUser={this.state.currentUser}
-              addNewMessage={addNewMessage}
+              addNewMessage={addNewMessage} colorCode={this.state.color}
             />
 
           </div>
