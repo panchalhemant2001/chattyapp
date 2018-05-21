@@ -119,8 +119,13 @@ npm run lint
 
 
 [Step 1: Start Chat Server](docs/1_start_chat_server.png)
+
 [Step 2: Start Chat Client](docs/2_start_chat_client.png)
+
 [Step 3: Start Chat App in the Browser](docs/3_starting_chat_app_in_browser.png)
+
 [Step 4: Change User Name](docs/4_change_user_name.png)
+
 [Step 5: User Count Status](docs/5_user_count_status.png)
+
 [Step 6: Sending Messages](docs/6_sending_message.png)
