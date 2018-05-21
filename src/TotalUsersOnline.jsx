@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-export default class TotalUsersOnline extends React.Component {
+export default class TotalUsersOnline extends Component {
   render() {
 
       return (

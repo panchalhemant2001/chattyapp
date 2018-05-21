@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
 
-export default class ChatBar extends React.Component {
+export default class ChatBar extends Component {
   render() {
     let username = this.props.currentUser.name;
     let oldUsername = username;
 
     const handleOnKeyPress = (event) => {
-      if(event.key === "Enter") {
+      if(event.key === 'Enter') {
         switch(event.target.name) {
           case 'message':
             let content = event.target.value;
@@ -14,16 +14,16 @@ export default class ChatBar extends React.Component {
             username = document.getElementById('uname').value;
             let colorCode =this.props.colorCode;
             if(content.trim() === '') {
-              alert("Empty message");
+              alert('Empty message');
             } else {
-              addNewMessage({type: "postMessage", username: username, content: content, color: colorCode});
+              addNewMessage({type: 'postMessage', username: username, content: content, color: colorCode});
               event.target.value='';
             }
             event.target.focus();
             break;
           case 'usrname':
             if(event.target.value.trim() === '') {
-              alert("Username cannot be empty!");
+              alert('Username cannot be empty!');
               event.target.value = username;
             } else {
               username = event.target.value;
@@ -32,7 +32,7 @@ export default class ChatBar extends React.Component {
               if(oldUsername !== username) {
                 let content = `*** ${oldUsername} *** changed their name to *** ${username} ***`;
                 let addNewMessage = this.props.addNewMessage;
-                addNewMessage({type: "postNotification", username: username, content: content, color: colorCode});
+                addNewMessage({type: 'postNotification', username: username, content: content, color: colorCode});
               }
             }
             event.target.focus();
@@ -41,7 +41,7 @@ export default class ChatBar extends React.Component {
       }
     }
 
-    const handleOnFocus = (event) => {
+    const handleOnFocus = () => {
       oldUsername = document.getElementById('uname').value;
     }
 

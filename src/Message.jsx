@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 
-export default class Message extends React.Component {
+export default class Message extends Component {
   render() {
-    const msgId = this.props.id; //for later use
+    //const msgId = this.props.id; //for later use
     const msgType = this.props.type;  //type incomingMessage or incomingNotification
     const color = this.props.color;  //color of incoming message/notification
 
@@ -14,7 +14,7 @@ export default class Message extends React.Component {
               <span className='message-content'>{this.props.content}</span>
           </div>
         );
-        break;
+        //break;
       case 'incomingNotification':
         return (
           <div className='message'>
@@ -22,7 +22,7 @@ export default class Message extends React.Component {
               <span className='message-content'><font color={color}>{this.props.content}</font></span>
           </div>
         );
-        break;
+        //break;
     }
   }
 }

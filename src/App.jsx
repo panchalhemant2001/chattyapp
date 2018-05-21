@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import Message from './Message.jsx';
 import MessageList from './MessageList.jsx';
 import ChatBar from './ChatBar.jsx';
 import TotalUsersOnline from './TotalUsersOnline.jsx';
@@ -15,7 +14,7 @@ class App extends Component {
         connections: 0,
         color: '',
         loading: true,
-        currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
+        currentUser: {name: 'Bob'}, // optional. if currentUser is not defined, it means the user is Anonymous
         messages: [],   //stores messages and notifications
     };
   }
@@ -56,24 +55,19 @@ class App extends Component {
         },
       1000);
 
-      console.log("componentDidMount <App />");
-
       //Initializing a client Websocket and connecting it to the chat server on port 3001 (localhost)
       this.socket = new WebSocket('ws://localhost:3001');
 
-      this.socket.onopen = (event) => {
-        console.log('Connected to Server');
+      this.socket.onopen = () => {
         this.socket.send(JSON.stringify({type: 'connectionDetails'}));
       };
 
-      this.socket.onerror = (event) => {
-        console.log('Error');
+      this.socket.onerror = () => {
+        //console.log('Error');
       }
 
       this.socket.onmessage = (event) => {
-        console.log(event);
         const data = JSON.parse(event.data);
-        console.log(data.totalConnections);
 
         if(data.type == 'connectionDetails') {
           //code to update number of _connections
