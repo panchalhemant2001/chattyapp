@@ -81,11 +81,12 @@ Open two terminal windows. One for the client App and other for the Server App.
 ### Start Server App
 
 - From within a client app directory, write following commands that installs the dependencies and starts the server application which listen to PORT 3001.
-...
+
+```
 cd chatty_server
 npm install --save
 npm start
-...
+```
 
 ### Start Client App:
 
